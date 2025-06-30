@@ -3,14 +3,14 @@ import pandas as pd
 import numpy as np
 import joblib
 
-# --- Load the trained model ---
+# --- Load trained model ---
 model = joblib.load("model.pkl")
 
-# --- Interpret model output into human-friendly messages ---
+# --- Interpret model output ---
 def interpret_predictions(preds):
     messages = []
 
-    # Cooler
+    # Cooler condition
     cooler = preds[0]
     if cooler == 100:
         messages.append("✅ The cooler is functioning normally.")
@@ -19,7 +19,7 @@ def interpret_predictions(preds):
     elif cooler == 3:
         messages.append("🔴 The cooler is near failure – immediate maintenance required.")
 
-    # Valve
+    # Valve condition
     valve = preds[1]
     if valve == 100:
         messages.append("✅ The valve is switching normally.")
@@ -52,7 +52,7 @@ def interpret_predictions(preds):
 
     return messages
 
-# --- Feature extraction from a raw sensor file ---
+# --- Feature extraction function ---
 def extract_features(df):
     features = {}
     for col in df.columns:
@@ -76,46 +76,52 @@ def extract_features(df):
         features[f"{col}_mean_abs_change"] = np.mean(np.abs(np.diff(signal)))
     return pd.DataFrame([features])
 
-# --- Streamlit App UI ---
+# --- Streamlit UI ---
 st.set_page_config(page_title="Hydraulic Condition Monitor", page_icon="🛠")
 st.title("🛠 Hydraulic Condition Monitoring")
-st.markdown("Upload a **raw sensor file** (e.g. from PS1, TS2, etc.) to predict the current equipment conditions.")
+st.markdown("Upload a **raw sensor file** (e.g. PS1.txt or test_sensor_data.csv) to predict component conditions.")
 
 uploaded_file = st.file_uploader("📂 Upload Sensor File (.txt or .csv)", type=["txt", "csv"])
 
 if uploaded_file is not None:
-   try:
-    # Try both separators
     try:
-        df = pd.read_csv(uploaded_file, sep="\t", header=None)
-    except:
-        df = pd.read_csv(uploaded_file, sep=",", header=None)
+        # Try reading with tab or comma delimiter
+        try:
+            df = pd.read_csv(uploaded_file, sep="\t", header=None)
+        except:
+            df = pd.read_csv(uploaded_file, sep=",", header=None)
 
-    # Clean the data
-    df = df.apply(pd.to_numeric, errors="coerce")  # turn any text into NaN
-    df.dropna(inplace=True)  # drop any rows with bad values
+        # Convert non-numeric to NaN, drop bad rows
+        df = df.apply(pd.to_numeric, errors="coerce")
+        df.dropna(inplace=True)
 
-    st.success("✅ File uploaded and cleaned successfully!")
-    st.subheader("📊 Preview of Raw Sensor Data:")
-    st.dataframe(df.head())
+        st.success("✅ File uploaded and cleaned successfully!")
+        st.subheader("📊 Preview of Raw Sensor Data:")
+        st.dataframe(df.head())
 
-    with st.spinner("⚙️ Extracting features..."):
-        X = extract_features(df)
+        # Feature extraction
+        with st.spinner("⚙️ Extracting features..."):
+            X = extract_features(df)
 
-    with st.spinner("🧠 Running model prediction..."):
-        preds = model.predict(X)[0]
+        # Model prediction
+        with st.spinner("🧠 Running model prediction..."):
+            preds = model.predict(X)[0]
 
-    st.subheader("🧠 Predicted Condition Codes:")
-    st.write({
-        "Cooler condition": preds[0],
-        "Valve condition": preds[1],
-        "Pump leakage": preds[2],
-        "Accumulator pressure": preds[3]
-    })
+        st.subheader("🧠 Predicted Condition Codes:")
+        st.write({
+            "Cooler condition": preds[0],
+            "Valve condition": preds[1],
+            "Pump leakage": preds[2],
+            "Accumulator pressure": preds[3]
+        })
 
-    st.subheader("🔎 Maintenance Suggestions:")
-    for msg in interpret_predictions(preds):
-        st.markdown(f"- {msg}")
+        st.subheader("🔎 Maintenance Suggestions:")
+        for msg in interpret_predictions(preds):
+            st.markdown(f"- {msg}")
 
-except Exception as e:
-    st.error(f"⚠️ Error reading file or making prediction: {e}")
+    except Exception as e:
+        st.error(f"⚠️ Error reading file or making prediction: {e}")
+
+else:
+    st.info("👈 Please upload a raw sensor file to begin.")
+
