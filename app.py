@@ -3,14 +3,14 @@ import pandas as pd
 import numpy as np
 import joblib
 
-# --- Load trained model ---
+# --- Load the trained model ---
 model = joblib.load("model.pkl")
 
-# --- Interpret model output ---
+# --- Interpret model output into human-friendly messages ---
 def interpret_predictions(preds):
     messages = []
 
-    # Cooler condition
+    # Cooler
     cooler = preds[0]
     if cooler == 100:
         messages.append("✅ The cooler is functioning normally.")
@@ -19,7 +19,7 @@ def interpret_predictions(preds):
     elif cooler == 3:
         messages.append("🔴 The cooler is near failure – immediate maintenance required.")
 
-    # Valve condition
+    # Valve
     valve = preds[1]
     if valve == 100:
         messages.append("✅ The valve is switching normally.")
@@ -52,7 +52,7 @@ def interpret_predictions(preds):
 
     return messages
 
-# --- Feature extraction function ---
+# --- Feature extraction from a raw sensor file ---
 def extract_features(df):
     features = {}
     for col in df.columns:
@@ -76,26 +76,22 @@ def extract_features(df):
         features[f"{col}_mean_abs_change"] = np.mean(np.abs(np.diff(signal)))
     return pd.DataFrame([features])
 
-# --- Streamlit UI ---
+# --- Streamlit App UI ---
 st.set_page_config(page_title="Hydraulic Condition Monitor", page_icon="🛠")
 st.title("🛠 Hydraulic Condition Monitoring")
-st.markdown("Upload a **raw sensor file** (e.g. PS1.txt or test_sensor_data.csv) to predict component conditions.")
+st.markdown("Upload a **raw sensor file** (e.g. from PS1, TS2, etc.) to predict the current equipment conditions.")
 
 uploaded_file = st.file_uploader("📂 Upload Sensor File (.txt or .csv)", type=["txt", "csv"])
 
 if uploaded_file is not None:
     try:
-        # Try reading with tab or comma delimiter
+        # Try reading with tab or comma
         try:
             df = pd.read_csv(uploaded_file, sep="\t", header=None)
         except:
             df = pd.read_csv(uploaded_file, sep=",", header=None)
 
-        # Convert non-numeric to NaN, drop bad rows
-        df = df.apply(pd.to_numeric, errors="coerce")
-        df.dropna(inplace=True)
-
-        st.success("✅ File uploaded and cleaned successfully!")
+        st.success("✅ File uploaded successfully!")
         st.subheader("📊 Preview of Raw Sensor Data:")
         st.dataframe(df.head())
 
@@ -103,7 +99,7 @@ if uploaded_file is not None:
         with st.spinner("⚙️ Extracting features..."):
             X = extract_features(df)
 
-        # Model prediction
+        # Prediction
         with st.spinner("🧠 Running model prediction..."):
             preds = model.predict(X)[0]
 
@@ -115,13 +111,12 @@ if uploaded_file is not None:
             "Accumulator pressure": preds[3]
         })
 
+        # Friendly messages
         st.subheader("🔎 Maintenance Suggestions:")
         for msg in interpret_predictions(preds):
             st.markdown(f"- {msg}")
 
     except Exception as e:
         st.error(f"⚠️ Error reading file or making prediction: {e}")
-
 else:
     st.info("👈 Please upload a raw sensor file to begin.")
-
