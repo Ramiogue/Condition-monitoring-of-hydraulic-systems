@@ -84,39 +84,38 @@ st.markdown("Upload a **raw sensor file** (e.g. from PS1, TS2, etc.) to predict 
 uploaded_file = st.file_uploader("📂 Upload Sensor File (.txt or .csv)", type=["txt", "csv"])
 
 if uploaded_file is not None:
+   try:
+    # Try both separators
     try:
-        # Try reading with tab or comma
-        try:
-            df = pd.read_csv(uploaded_file, sep="\t", header=None)
-        except:
-            df = pd.read_csv(uploaded_file, sep=",", header=None)
+        df = pd.read_csv(uploaded_file, sep="\t", header=None)
+    except:
+        df = pd.read_csv(uploaded_file, sep=",", header=None)
 
-        st.success("✅ File uploaded successfully!")
-        st.subheader("📊 Preview of Raw Sensor Data:")
-        st.dataframe(df.head())
+    # Clean the data
+    df = df.apply(pd.to_numeric, errors="coerce")  # turn any text into NaN
+    df.dropna(inplace=True)  # drop any rows with bad values
 
-        # Feature extraction
-        with st.spinner("⚙️ Extracting features..."):
-            X = extract_features(df)
+    st.success("✅ File uploaded and cleaned successfully!")
+    st.subheader("📊 Preview of Raw Sensor Data:")
+    st.dataframe(df.head())
 
-        # Prediction
-        with st.spinner("🧠 Running model prediction..."):
-            preds = model.predict(X)[0]
+    with st.spinner("⚙️ Extracting features..."):
+        X = extract_features(df)
 
-        st.subheader("🧠 Predicted Condition Codes:")
-        st.write({
-            "Cooler condition": preds[0],
-            "Valve condition": preds[1],
-            "Pump leakage": preds[2],
-            "Accumulator pressure": preds[3]
-        })
+    with st.spinner("🧠 Running model prediction..."):
+        preds = model.predict(X)[0]
 
-        # Friendly messages
-        st.subheader("🔎 Maintenance Suggestions:")
-        for msg in interpret_predictions(preds):
-            st.markdown(f"- {msg}")
+    st.subheader("🧠 Predicted Condition Codes:")
+    st.write({
+        "Cooler condition": preds[0],
+        "Valve condition": preds[1],
+        "Pump leakage": preds[2],
+        "Accumulator pressure": preds[3]
+    })
 
-    except Exception as e:
-        st.error(f"⚠️ Error reading file or making prediction: {e}")
-else:
-    st.info("👈 Please upload a raw sensor file to begin.")
+    st.subheader("🔎 Maintenance Suggestions:")
+    for msg in interpret_predictions(preds):
+        st.markdown(f"- {msg}")
+
+except Exception as e:
+    st.error(f"⚠️ Error reading file or making prediction: {e}")
