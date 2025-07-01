@@ -79,74 +79,91 @@ This project uses machine learning to perform condition monitoring on hydraulic 
     accuracy                           1.00       425
    macro avg       1.00      1.00      1.00       425
 weighted avg       1.00      1.00      1.00       425
-📊 More target results available in the Colab notebook
-🔗 Open Full Evaluation in Google Colab
+```
+
+📊 **More target results available in the Colab notebook**  
+🔗 [Open Full Evaluation in Google Colab](https://colab.research.google.com/drive/15a3CKbxCV-GtqiFkTI_Ky-AZ7JnQz2KF)
+
+---
 
 ## 🌐 App Features
-📁 Upload raw sensor data file (.txt or .csv, tab-separated, 16 columns)
 
-🧠 Performs feature extraction internally
+- 📁 Upload raw sensor data file (`.txt` or `.csv`, tab-separated, 16 columns)  
+- 🧠 Performs feature extraction internally  
+- 🎯 Predicts health of all 4 components  
+- 📋 Provides maintenance alerts like:
 
-🎯 Predicts health of all 4 components
-
-📋 Provides maintenance alerts like:
-
-text
-Copy
-Edit
+```text
 🔴 The valve is failing – urgent attention required  
 🟡 The pump shows weak leakage – schedule inspection  
 🔴 The accumulator pressure is low – recharge soon  
-📸 App Screenshots
+```
+
+---
+
+## 📸 App Screenshots
+
 Below are example outputs of the deployed Streamlit app:
 
+![Screenshot 1](https://github.com/user-attachments/assets/92023474-01c9-4ca2-a8f8-807db9f50520)  
+![Screenshot 2](https://github.com/user-attachments/assets/76af9418-eb4e-4212-b2f3-3bfac7d20a27)
 
-
+---
 
 ## 🧪 Simulate Sensor Input
-Use this script to simulate a valid .txt input for testing:
 
-python
-Copy
-Edit
+Use this script to simulate a valid `.txt` input for testing:
+
+```python
 import numpy as np, pandas as pd
 data = np.random.normal(0, 1, size=(600, 16))  # 600 time steps × 16 sensors
 pd.DataFrame(data).to_csv("test_sensor_data.txt", sep="\t", index=False, header=False)
+```
+
+---
 
 ## ⚙️ Tech Stack
-Tool/Library	Purpose
-Python 3.9	Core language
-Pandas / NumPy	Data processing
-Scikit-learn	Model training (Random Forest)
-Streamlit	Web app deployment
-Joblib	Model serialization
-Google Colab	Training and experimentation
-GitHub	Version control
-Streamlit Cloud	Live deployment hosting
+
+| Tool/Library       | Purpose                           |
+|--------------------|-----------------------------------|
+| Python 3.9         | Core language                     |
+| Pandas / NumPy     | Data processing                   |
+| Scikit-learn       | Model training (Random Forest)    |
+| Streamlit          | Web app deployment                |
+| Joblib             | Model serialization               |
+| Google Colab       | Training and experimentation      |
+| GitHub             | Version control                   |
+| Streamlit Cloud    | Live deployment hosting           |
+
+---
 
 ## 🤖 Acknowledgements
-Kleiner et al. (2022) – for the hydraulic monitoring dataset and methodology
 
-ChatGPT by OpenAI – for assisting with preprocessing logic, evaluation pipeline, model building, Streamlit deployment, and documentation
+- **Kleiner et al. (2022)** – for the hydraulic monitoring dataset and methodology  
+- **ChatGPT by OpenAI** – for assisting with code and documentation  
+- **Kaggle Community** – for providing high-quality sensor data for reproducible research
 
-Kaggle Community – for providing high-quality sensor data for reproducible research
+---
 
 ## 👤 Author
-Name: Tshepang Ramaoka
-📧 Email: ramaokafelicia@gmail.com
-🌍 Location: South Africa
-🔗 Colab Notebook: Open here
+
+**Name**: Tshepang Ramaoka  
+📧 **Email**: ramaokafelicia@gmail.com  
+🌍 **Location**: South Africa  
+🔗 **Colab Notebook**: [Open here](https://colab.research.google.com/drive/15a3CKbxCV-GtqiFkTI_Ky-AZ7JnQz2KF)
+
+---
 
 ## 🚀 Future Enhancements
-Add FastAPI REST endpoint for API-based predictions
 
-Connect to real-time sensor data streams via MQTT or Kafka
+- Add FastAPI REST endpoint for API-based predictions  
+- Connect to real-time sensor data streams via MQTT or Kafka  
+- Add support for model retraining with new incoming data  
+- Explore LSTM or hybrid deep learning models for temporal learning  
+- Create a dashboard for monitoring historical predictions and alerts
 
-Add support for model retraining with new incoming data
+---
 
-Explore LSTM or hybrid deep learning models for temporal learning
-
-Create a dashboard for monitoring historical predictions and alerts
 
 
 
