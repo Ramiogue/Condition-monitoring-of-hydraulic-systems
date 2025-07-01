@@ -172,7 +172,7 @@ pd.DataFrame(data).to_csv("test_sensor_data.txt", sep="\t", index=False, header=
 ## 🤖 Acknowledgements
 
 - **Kleiner et al. (2022)** – for the hydraulic monitoring dataset and methodology  
-- **ChatGPT by OpenAI** – for assisting with preprocessing logic, evaluation pipeline, model building, Streamlit deployment, and documentation  
+- **ChatGPT by OpenAI** – for assisting with code and documentation  
 - **Kaggle Community** – for providing high-quality sensor data for reproducible research
 
 ---
