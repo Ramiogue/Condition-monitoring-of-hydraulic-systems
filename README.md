@@ -22,7 +22,7 @@ This project uses machine learning to perform condition monitoring on hydraulic 
 
 ## 📚 Dataset Summary
 
-- **Source**: Kaggle  
+- **Source**: [Kaggle – Condition Monitoring of Hydraulic Systems](https://www.kaggle.com/datasets/jjacostupa/condition-monitoring-of-hydraulic-systems)  
 - **System**: Hydraulic test rig with primary and secondary circuits  
 - **Total cycles**: 2205  
 - **Cycle duration**: 60 seconds  
@@ -113,7 +113,7 @@ Below are example outputs of the deployed Streamlit app:
 ## 📄 Documents & How to Run This Project Yourself
 
 ### 🧪 Train Your Own Model from Scratch (Locally or in Colab)
-1. Download the dataset from Kaggle or the [original paper](https://www.mdpi.com/1996-1073/15/17/6217).
+1. Download the dataset from Kaggle: https://www.kaggle.com/datasets/jjacostupa/condition-monitoring-of-hydraulic-systems  
 2. Use the [Colab notebook](https://colab.research.google.com/drive/15a3CKbxCV-GtqiFkTI_Ky-AZ7JnQz2KF) to:
    - Load all 16 sensor files and `profile.txt`
    - Preprocess data (`stable_flag = 1`)
@@ -195,8 +195,3 @@ pd.DataFrame(data).to_csv("test_sensor_data.txt", sep="\t", index=False, header=
 - Create a dashboard for monitoring historical predictions and alerts
 
 ---
-
-
-
-
-
