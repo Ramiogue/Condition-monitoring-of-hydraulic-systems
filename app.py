@@ -102,6 +102,8 @@ if uploaded_file is not None:
         # Prediction
         with st.spinner("🧠 Running model prediction..."):
             preds = model.predict(X)[0]
+            preds = [int(x) for x in preds]
+
 
         st.subheader("🧠 Predicted Condition Codes:")
         st.write({
