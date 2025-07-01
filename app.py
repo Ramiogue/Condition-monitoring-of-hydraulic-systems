@@ -69,7 +69,7 @@ def extract_features(df):
         features[f"{col}_first_min"] = signal.idxmin()
         features[f"{col}_first_max"] = signal.idxmax()
         features[f"{col}_last_min"] = signal[::-1].idxmin()
-        features[f"{col}_last_max"] = signal[::-1].idxmax()
+       
         features[f"{col}_sum"] = signal.sum()
         features[f"{col}_abs_energy"] = np.sum(signal ** 2)
         features[f"{col}_abs_sum_change"] = np.sum(np.abs(np.diff(signal)))
