@@ -110,6 +110,38 @@ Below are example outputs of the deployed Streamlit app:
 
 ---
 
+## 📄 Documents & How to Run This Project Yourself
+
+### 🧪 Train Your Own Model from Scratch (Locally or in Colab)
+1. Download the dataset from Kaggle or the [original paper](https://www.mdpi.com/1996-1073/15/17/6217).
+2. Use the [Colab notebook](https://colab.research.google.com/drive/15a3CKbxCV-GtqiFkTI_Ky-AZ7JnQz2KF) to:
+   - Load all 16 sensor files and `profile.txt`
+   - Preprocess data (`stable_flag = 1`)
+   - Extract statistical features
+   - Train a `MultiOutputClassifier(RandomForestClassifier)`
+   - Save your model using `joblib.dump(model, "model.pkl")`
+
+---
+
+### 🚀 Run the Streamlit App Locally
+1. Clone this repo  
+   ```bash
+   git clone https://github.com/yourusername/hydraulic-monitoring.git
+   cd hydraulic-monitoring
+   ```
+
+2. Install dependencies  
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Run the app  
+   ```bash
+   streamlit run app.py
+   ```
+
+---
+
 ## 🧪 Simulate Sensor Input
 
 Use this script to simulate a valid `.txt` input for testing:
@@ -140,7 +172,7 @@ pd.DataFrame(data).to_csv("test_sensor_data.txt", sep="\t", index=False, header=
 ## 🤖 Acknowledgements
 
 - **Kleiner et al. (2022)** – for the hydraulic monitoring dataset and methodology  
-- **ChatGPT by OpenAI** – for assisting with code and documentation  
+- **ChatGPT by OpenAI** – for assisting with preprocessing logic, evaluation pipeline, model building, Streamlit deployment, and documentation  
 - **Kaggle Community** – for providing high-quality sensor data for reproducible research
 
 ---
@@ -163,6 +195,7 @@ pd.DataFrame(data).to_csv("test_sensor_data.txt", sep="\t", index=False, header=
 - Create a dashboard for monitoring historical predictions and alerts
 
 ---
+
 
 
 
